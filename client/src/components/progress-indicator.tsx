@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle, Loader2, Clock } from 'lucide-react';
@@ -15,6 +16,8 @@ export default function ProgressIndicator({ sessionId }: ProgressIndicatorProps)
 
   const { data: session } = useQuery({
     queryKey: ['/api/sessions', sessionId],
+    queryFn: () =>
+      apiRequest('GET', `/api/sessions/${sessionId}`).then(res => res.json()),
     refetchInterval: 1000, // Poll every second
     enabled: !!sessionId,
   });
