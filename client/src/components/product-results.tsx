@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,6 +14,9 @@ interface ProductResultsProps {
 export default function ProductResults({ searchQuery, onProductSelect }: ProductResultsProps) {
   const { data, isLoading, error } = useQuery({
     queryKey: ['/api/products', searchQuery],
+    queryFn: () =>
+      apiRequest('GET', `/api/products?query=${encodeURIComponent(searchQuery ?? '')}`)
+        .then(res => res.json()),
     enabled: !!searchQuery,
   });
 

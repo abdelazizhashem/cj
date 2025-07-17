@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,11 +23,15 @@ interface MerchantAnalysisProps {
 export default function MerchantAnalysis({ productId }: MerchantAnalysisProps) {
   const { data: merchantData, isLoading: merchantsLoading } = useQuery({
     queryKey: ['/api/products', productId, 'merchants'],
+    queryFn: () =>
+      apiRequest('GET', `/api/products/${productId}/merchants`).then(res => res.json()),
     enabled: !!productId,
   });
 
   const { data: reviewData, isLoading: reviewsLoading } = useQuery({
     queryKey: ['/api/products', productId, 'reviews'],
+    queryFn: () =>
+      apiRequest('GET', `/api/products/${productId}/reviews`).then(res => res.json()),
     enabled: !!productId,
   });
 
